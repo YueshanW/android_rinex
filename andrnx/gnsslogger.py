@@ -396,7 +396,11 @@ def get_glo_freq_chn_list(batches):
         for measurement in batch:
 
             if measurement['ConstellationType'] == CONSTELLATION_GLONASS:
-                sat = get_satname(measurement)
+                try:
+                    sat = get_satname(measurement)
+                except ValueError as e:
+                    sys.stderr.write("{0}\n".format(e))
+                    return None
 
                 if sat not in freq_chn_list:
                     freq = get_frequency(measurement)
