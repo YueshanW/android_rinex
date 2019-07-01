@@ -4,5 +4,4 @@ __pycache__
 build/
 dist/
 
-#Ignore files from IDE
-.idea/
+*.pyc
