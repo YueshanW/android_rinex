@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python3
 """
 Module to process log files from Google's Android GNSS Logger app
@@ -398,14 +399,13 @@ def get_glo_freq_chn_list(batches):
             if measurement['ConstellationType'] == CONSTELLATION_GLONASS:
                 try:
                     sat = get_satname(measurement)
+
+                    if sat not in freq_chn_list:
+                        freq = get_frequency(measurement)
+                        freq_chn = round((freq - GLO_L1_CENTER_FREQ)/GLO_L1_DFREQ)
+                        freq_chn_list[sat] = freq_chn
                 except ValueError as e:
                     sys.stderr.write("{0}\n".format(e))
-                    return None
-
-                if sat not in freq_chn_list:
-                    freq = get_frequency(measurement)
-                    freq_chn = round((freq - GLO_L1_CENTER_FREQ)/GLO_L1_DFREQ)
-                    freq_chn_list[sat] = freq_chn
 
     return freq_chn_list
 
@@ -915,7 +915,7 @@ def process(measurement, fullbiasnanos=None, integerize=False, pseudorange_bias=
 
 def get_leap_seconds(current_epoch):
     """
-    Computes the number of leap seconds passed since the start of GPST 
+    Computes the number of leap seconds passed since the start of GPST
     :param current_epoch: current datetime value representing the measurements epoch
     :return: number of leap seconds since GPST
     """
